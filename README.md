@@ -11,9 +11,11 @@ From this 3 datasets (airports.csv, flights.csv, planes.csv), build a browsing i
 
 ## Ressources  
 
-The data pipeline is handled with PySpark, the python version of [Apache Saprk](https://spark.apache.org).  
+The data pipeline is handled by PySpark, the python version of [Apache Saprk](https://spark.apache.org).  
 To install PySpark: 
 ````
 pip install pyspark
 `````
 Additional information to install PySpark on MacOS can be found [here](https://sparkbyexamples.com/pyspark/how-to-install-pyspark-on-mac/).
+
+The graphic user interface is handled by [Tkinter](https://wiki.python.org/moin/TkInter) (Present by default in the python packages).
