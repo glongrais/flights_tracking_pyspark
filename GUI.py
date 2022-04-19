@@ -15,6 +15,10 @@ def __retrieveManufacturer(obj, func):
     val = obj.get()
     new_val = func(val)
 
+def __retrieveModel(obj, func):
+    val = obj.get()
+    func(val)
+
 #Generation functions
 
 def __createComboBox(root, name, values):
@@ -40,6 +44,6 @@ def createComboBoxModel(root, name, values, func):
 
     combo, button = __createComboBox(root, name, values)
 
-    button.configure(command=lambda: __retrieveManufacturer(combo, func))
+    button.configure(command=lambda: __retrieveModel(combo, func))
 
     return combo

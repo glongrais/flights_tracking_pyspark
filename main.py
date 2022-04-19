@@ -3,9 +3,11 @@ import GUI
 import backend
 
 def updatePlaneModelsList(val):
-    global planes_df
     models = backend.getColumnElement(backend.filterElements(planes_df, planes_df.manufacturer, val), "model")
     combo_model['values']=sorted(models)
+
+def countModel(val):
+    print(backend.filterElements(planes_df, planes_df.model, val).count())
 
 def main():
     root = GUI.init("Flights Tracker")
@@ -18,7 +20,7 @@ def main():
     GUI.createComboBoxManufacturer(root, "Plane manufacturers", manufacturers, updatePlaneModelsList)
 
     models = backend.getColumnElement(planes_df, "model")
-    combo_model = GUI.createComboBoxModel(root, "Plane models", sorted(models), updatePlaneModelsList)
+    combo_model = GUI.createComboBoxModel(root, "Plane models", sorted(models), countModel)
 
     root.mainloop()
 
