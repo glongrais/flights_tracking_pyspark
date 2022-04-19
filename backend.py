@@ -9,3 +9,6 @@ def loadFile(path):
 
 def getColumnElement(df, col_name):
     return df.select(col_name).distinct().rdd.map(lambda r: r[0]).collect()
+
+def filterElements(df, col, val):
+    return df.filter(col==val)
