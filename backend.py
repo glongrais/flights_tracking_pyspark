@@ -12,3 +12,6 @@ def getColumnElement(df, col_name):
 
 def filterElements(df, col, val):
     return df.filter(col==val)
+
+def getCountedElements(df, col1, col2):
+    return df[[col1,col2]].groupby(col1).count()

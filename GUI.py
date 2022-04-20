@@ -1,12 +1,14 @@
 from tkinter import *
 from tkinter import ttk
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
  
  #Init function
 
 def init(window_name):
     root = Tk()
     root.title(window_name)
-    root.geometry("400x200")
+    root.geometry("800x400")
 
     return root
 
@@ -56,3 +58,11 @@ def createLabelCountPlanes(root, var):
 
     label = Label(root, textvariable= var)
     label.pack()
+
+def createPlotUI(root, data):
+    figure = plt.Figure(figsize=(6,5), dpi=100)
+    ax1 = figure.add_subplot()
+    plot = FigureCanvasTkAgg(figure, root)
+    plot.get_tk_widget().pack(fill=BOTH)
+    data.plot(kind='bar', ax=ax1, legend=True)
+    ax1.set_xticklabels(data['model'], rotation=45)

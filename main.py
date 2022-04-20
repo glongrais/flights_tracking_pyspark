@@ -1,4 +1,5 @@
-from pydoc import ModuleScanner
+from pyexpat import model
+import pandas as pd
 import GUI
 import backend
 
@@ -12,6 +13,7 @@ def countModel(val):
 def main():
     root = GUI.init("Flights Tracker")
     global planes_df, combo_model
+    
     airports_df = backend.loadFile("./Datasets/airports.csv")
     flights_small_df = backend.loadFile("./Datasets/flights_small.csv")
     planes_df = backend.loadFile("./Datasets/planes.csv")
@@ -21,6 +23,11 @@ def main():
 
     models = backend.getColumnElement(planes_df, "model")
     combo_model = GUI.createComboBoxModel(root, "Plane models", sorted(models), countModel)
+
+    df = planes_df.filter(planes_df.manufacturer=="AIRBUS")
+    data = backend.getCountedElements(df, 'model', 'engine').toPandas()
+
+    GUI.createPlotUI(root, data)
 
     root.mainloop()
 
