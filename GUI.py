@@ -15,9 +15,9 @@ def __retrieveManufacturer(obj, func):
     val = obj.get()
     new_val = func(val)
 
-def __retrieveModel(obj, func):
+def __retrieveModel(obj, func, var):
     val = obj.get()
-    func(val)
+    var.set(func(val))
 
 #Generation functions
 
@@ -44,6 +44,15 @@ def createComboBoxModel(root, name, values, func):
 
     combo, button = __createComboBox(root, name, values)
 
-    button.configure(command=lambda: __retrieveModel(combo, func))
+    var = IntVar()
+    var.set(0)
+
+    button.configure(command=lambda: __retrieveModel(combo, func, var))
+    createLabelCountPlanes(root, var)
 
     return combo
+
+def createLabelCountPlanes(root, var):
+
+    label = Label(root, textvariable= var)
+    label.pack()

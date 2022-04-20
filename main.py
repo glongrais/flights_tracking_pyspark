@@ -7,7 +7,7 @@ def updatePlaneModelsList(val):
     combo_model['values']=sorted(models)
 
 def countModel(val):
-    print(backend.filterElements(planes_df, planes_df.model, val).count())
+    return backend.filterElements(planes_df, planes_df.model, val).count()
 
 def main():
     root = GUI.init("Flights Tracker")
