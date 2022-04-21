@@ -13,7 +13,7 @@ def countModel(val):
 def main():
     root = GUI.init("Flights Tracker")
     global planes_df, combo_model
-    
+
     airports_df = backend.loadFile("./Datasets/airports.csv")
     flights_small_df = backend.loadFile("./Datasets/flights_small.csv")
     planes_df = backend.loadFile("./Datasets/planes.csv")
@@ -27,7 +27,7 @@ def main():
     df = planes_df.filter(planes_df.manufacturer=="AIRBUS")
     data = backend.getCountedElements(df, 'model', 'engine').toPandas()
 
-    GUI.createPlotUI(root, data)
+    GUI.createMap(root)
 
     root.mainloop()
 
