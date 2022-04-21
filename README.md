@@ -19,3 +19,9 @@ pip install pyspark
 Additional information to install PySpark on MacOS can be found [here](https://sparkbyexamples.com/pyspark/how-to-install-pyspark-on-mac/).
 
 The graphic user interface is handled by [Tkinter](https://wiki.python.org/moin/TkInter) (Present by default in the python packages).
+
+The map is provided by [Tom Schimansky](https://github.com/TomSchimansky) with his custom Tkinter widget [TkinterMapView](https://github.com/TomSchimansky/TkinterMapView).  
+To install TkinterMapView:
+````
+pip install tkintermapview
+`````
