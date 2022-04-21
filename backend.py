@@ -15,3 +15,7 @@ def filterElements(df, col, val):
 
 def getCountedElements(df, col1, col2):
     return df[[col1,col2]].groupby(col1).count()
+
+def getFaaFromName(df, name):
+    res =df.filter(df.name==name).collect()[0]['faa']
+    return res

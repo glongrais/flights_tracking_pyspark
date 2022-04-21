@@ -6,15 +6,15 @@ from tkintermapview import *
  
  #Init function
 
-def init(window_name):
+def init(window_name, width, height):
     root = Tk()
     root.title(window_name)
-    root.geometry("800x400")
+    root.geometry(str(width)+"x"+str(height))
 
     return root
 
 #Command functions
-def __retrieveManufacturer(obj, func):
+def __retrieveOrigin(obj, func):
     val = obj.get()
     new_val = func(val)
 
@@ -24,9 +24,11 @@ def __retrieveModel(obj, func, var):
 
 #Generation functions
 
+def createFrame(root):
+    return Frame(root)
+
 def __createComboBox(root, name, values):
     f = Frame(root)
-    f.pack()
 
     combo = ttk.Combobox(f, values = values)
     combo.set(name) 
@@ -35,13 +37,15 @@ def __createComboBox(root, name, values):
     button = Button(f, text="select")
     button.pack(side=LEFT)
 
-    return combo, button
+    return f, combo, button
 
-def createComboBoxManufacturer(root, name, values, func):
+def createComboBoxOrigin(root, name, values, func):
 
-    combo, button = __createComboBox(root, name, values)
+    frame, combo, button = __createComboBox(root, name, values)
 
-    button.configure(command=lambda: __retrieveManufacturer(combo, func))
+    button.configure(command=lambda: __retrieveOrigin(combo, func))
+
+    return frame
 
 def createComboBoxModel(root, name, values, func):
 
@@ -70,4 +74,11 @@ def createPlotUI(root, data):
 
 def createMap(root):
     map_widget = TkinterMapView(root, width=800, height=600, corner_radius=0)
-    map_widget.pack()
+    return map_widget
+
+def getFrameChild(frame, type):
+    children_widgets = frame.winfo_children()
+    for child_widget in children_widgets:
+        print(child_widget.winfo_class())
+        if child_widget.winfo_class() == type:
+            return child_widget
