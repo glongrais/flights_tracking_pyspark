@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from tkintermapview import *
  
  #Init function
 
@@ -50,7 +51,7 @@ def createComboBoxModel(root, name, values, func):
     var.set(0)
 
     button.configure(command=lambda: __retrieveModel(combo, func, var))
-    createLabelCountPlanes(root, var)
+    #createLabelCountPlanes(root, var)
 
     return combo
 
@@ -66,3 +67,7 @@ def createPlotUI(root, data):
     plot.get_tk_widget().pack(fill=BOTH)
     data.plot(kind='bar', ax=ax1, legend=True)
     ax1.set_xticklabels(data['model'], rotation=45)
+
+def createMap(root):
+    map_widget = TkinterMapView(root, width=800, height=600, corner_radius=0)
+    map_widget.pack()
