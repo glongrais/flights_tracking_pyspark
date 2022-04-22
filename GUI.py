@@ -79,6 +79,5 @@ def createMap(root):
 def getFrameChild(frame, type):
     children_widgets = frame.winfo_children()
     for child_widget in children_widgets:
-        print(child_widget.winfo_class())
         if child_widget.winfo_class() == type:
             return child_widget

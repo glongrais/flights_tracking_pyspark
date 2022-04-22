@@ -19,3 +19,15 @@ def getCountedElements(df, col1, col2):
 def getFaaFromName(df, name):
     res =df.filter(df.name==name).collect()[0]['faa']
     return res
+
+def getNameFromFaa(df, faa):
+    res =df.filter(df.faa==faa).collect()[0]['name']
+    return res
+
+def getAirportPosition(df, faa):
+    res = []
+    row = df.filter(df.faa==faa).collect()[0]
+    res.append(float(row['lat']))
+    res.append(float(row['lon']))
+
+    return res
