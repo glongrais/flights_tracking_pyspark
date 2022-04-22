@@ -3,10 +3,6 @@ import pandas as pd
 import GUI
 import backend
 
-def updatePlaneModelsList(val):
-    models = backend.getColumnElement(backend.filterElements(planes_df, planes_df.manufacturer, val), "model")
-    combo_model['values']=sorted(models)
-
 def updateDestAirportsList(val):
     faa = backend.getFaaFromName(airports_df, val)
     dest = backend.getColumnElement(backend.filterElements(flights_small_df, flights_small_df.origin, faa), "dest")
@@ -19,9 +15,6 @@ def updateDestAirportsList(val):
 
 def originMarkerClicked(marker):
     updateDestAirportsList(marker.text)
-
-def countModel(val):
-    return backend.filterElements(planes_df, planes_df.model, val).count()
 
 def main():
 
@@ -64,15 +57,6 @@ def main():
 
     combos_frame.grid(column=0, row=0, pady=10)
     map.grid(column=0,row=1)
-
-    """     manufacturers = backend.getColumnElement(planes_df, "manufacturer")
-    GUI.createComboBoxManufacturer(root, "Plane manufacturers", manufacturers, updatePlaneModelsList)
-
-    models = backend.getColumnElement(planes_df, "model")
-    combo_model = GUI.createComboBoxModel(root, "Plane models", sorted(models), countModel)
-
-    df = planes_df.filter(planes_df.manufacturer=="AIRBUS")
-    data = backend.getCountedElements(df, 'model', 'engine').toPandas() """
 
     root.mainloop()
 
