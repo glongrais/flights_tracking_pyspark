@@ -13,12 +13,32 @@ def updateDestAirportsList(val):
 
     combo_dest['values']=sorted(names_dest)
 
+    clearMarkers(markers_list)
+    setDestMarkers(markers_list, faa, dest)
+
 def originMarkerClicked(marker):
     updateDestAirportsList(marker.text)
 
+def clearMarkers(markers_list):
+    for m in markers_list:
+        m.delete()
+
+def setDestMarkers(markers_list, origin_faa, dest_faa):
+    pos = backend.getAirportPosition(airports_df, origin_faa)
+    map.set_marker(pos[0], pos[1], text=backend.getNameFromFaa(airports_df, origin_faa))
+
+    for n in dest_faa:
+        pos = backend.getAirportPosition(airports_df, n)
+        marker = map.set_marker(pos[0], pos[1], text=backend.getNameFromFaa(airports_df, n), marker_color_circle="#4272f5", marker_color_outside="#1b57fa")
+        markers_list.append(marker)
+    
+    print(len(markers_list))
+    
+    map.set_zoom(3)
+
 def main():
 
-    global flights_small_df, airports_df, combo_dest, map
+    global flights_small_df, airports_df, combo_dest, map, markers_list
 
     root = GUI.init("Flights Tracker",800,650)
 
@@ -27,6 +47,7 @@ def main():
     #planes_df = backend.loadFile("./Datasets/planes.csv")
 
     map = GUI.createMap(root)
+    markers_list = []
 
     origin_airports = backend.getColumnElement(flights_small_df, "origin")
 
@@ -38,7 +59,8 @@ def main():
         airport_name = backend.getNameFromFaa(airports_df, n)
         names_origin.append(airport_name)
         pos = backend.getAirportPosition(airports_df, n)
-        map.set_marker(pos[0], pos[1], text=airport_name, command=originMarkerClicked)
+        marker = map.set_marker(pos[0], pos[1], text=airport_name, command=originMarkerClicked)
+        markers_list.append(marker)
         x.append(pos[0])
         y.append(pos[1])
 
