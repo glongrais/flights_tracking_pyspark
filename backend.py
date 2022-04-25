@@ -2,7 +2,7 @@ from pyspark import SparkContext
 from pyspark.sql import SparkSession
 
 sc = SparkContext("local", "Simple App")
-spark = SparkSession.builder.getOrCreate()
+spark = SparkSession.builder.master('local[*]').getOrCreate()
 
 def loadFile(path):
     return spark.read.csv(path, header=True)
@@ -25,9 +25,9 @@ def getNameFromFaa(df, faa):
     return res
 
 def getAirportPosition(df, faa):
-    res = []
-    row = df.filter(df.faa==faa).collect()[0]
-    res.append(float(row['lat']))
-    res.append(float(row['lon']))
+    res = {}
+    rows = df.filter(df.faa.isin(faa)).collect()
+    for r in rows:
+        res[r['faa']] = (float(r['lat']), float(r['lon']))
 
     return res

@@ -1,4 +1,5 @@
-from pyexpat import model
+from multiprocessing import Process
+from turtle import position
 import pandas as pd
 import GUI
 import backend
@@ -14,7 +15,13 @@ def updateDestAirportsList(val):
     combo_dest['values']=sorted(names_dest)
 
     clearMarkers(markers_list)
-    setDestMarkers(markers_list, faa, dest)
+
+    pos = backend.getAirportPosition(airports_df, [faa])
+    map.set_marker(pos[0], pos[1], text=backend.getNameFromFaa(airports_df, faa))
+    backend.getAirportPosition(airports_df, dest)
+    #setDestMarkers(markers_list, dest)
+
+    map.set_zoom(3)
 
 def originMarkerClicked(marker):
     updateDestAirportsList(marker.text)
@@ -23,18 +30,33 @@ def clearMarkers(markers_list):
     for m in markers_list:
         m.delete()
 
-def setDestMarkers(markers_list, origin_faa, dest_faa):
-    pos = backend.getAirportPosition(airports_df, origin_faa)
-    map.set_marker(pos[0], pos[1], text=backend.getNameFromFaa(airports_df, origin_faa))
+def setDestMarkers(markers_list, dest_faa):
+    global positions, names
+    positions = []
+    names = []
+    processes = []
 
     for n in dest_faa:
-        pos = backend.getAirportPosition(airports_df, n)
-        marker = map.set_marker(pos[0], pos[1], text=backend.getNameFromFaa(airports_df, n), marker_color_circle="#4272f5", marker_color_outside="#1b57fa")
+        #pos = backend.getAirportPosition(airports_df, n)
+        #marker = map.set_marker(pos[0], pos[1], text=backend.getNameFromFaa(airports_df, n), marker_color_circle="#4272f5", marker_color_outside="#1b57fa")
+        #markers_list.append(marker)
+        processes.append(Process(target=pushPositionandName, args=(n)))
+
+    for p in processes:
+        p.start()
+    
+    for p in processes:
+        p.join()
+    
+    for i in range(len(positions)):
+        marker = map.set_marker(positions[i][0], positions[i][1], text=names[i], marker_color_circle="#4272f5", marker_color_outside="#1b57fa")
         markers_list.append(marker)
-    
-    print(len(markers_list))
-    
-    map.set_zoom(3)
+
+def pushPositionandName(dest):
+    pos = backend.getAirportPosition(airports_df, dest)
+    name = backend.getNameFromFaa(airports_df, dest)
+    #positions.append(pos)
+    #names.append(name)
 
 def main():
 
@@ -50,6 +72,7 @@ def main():
     markers_list = []
 
     origin_airports = backend.getColumnElement(flights_small_df, "origin")
+    pos = backend.getAirportPosition(airports_df, origin_airports)
 
     names_origin = []
     x = []
@@ -58,11 +81,11 @@ def main():
     for n in origin_airports:
         airport_name = backend.getNameFromFaa(airports_df, n)
         names_origin.append(airport_name)
-        pos = backend.getAirportPosition(airports_df, n)
-        marker = map.set_marker(pos[0], pos[1], text=airport_name, command=originMarkerClicked)
+        p = pos[n]
+        marker = map.set_marker(p[0], p[1], text=airport_name, command=originMarkerClicked)
         markers_list.append(marker)
-        x.append(pos[0])
-        y.append(pos[1])
+        x.append(p[0])
+        y.append(p[1])
 
     centroid = (sum(x) / len(x), sum(y) / len(y))
     map.set_position(centroid[0], centroid[1])
